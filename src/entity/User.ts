@@ -1,4 +1,5 @@
 import {Entity, ObjectID, Column, ObjectIdColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max} from "class-validator";
 
 @Entity()
 export class User {
@@ -12,6 +13,7 @@ export class User {
     username: string;
 
     @Column()
+    @IsEmail()
     email: string;
 
     @Column()
