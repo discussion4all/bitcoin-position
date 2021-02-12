@@ -1,6 +1,6 @@
 import {getMongoRepository} from "typeorm";
 import {User} from "../entity/User";
-
+import  {ObjectID} from 'mongodb';
 /*export class UserController {
     private userRepository = getMongoRepository(User);
 
@@ -12,19 +12,22 @@ import {User} from "../entity/User";
 }*/
 
 exports.createUser = async (req, res) => {
-	var userRepository = getMongoRepository(User);
-    var name,username,email;
-    const getUser =await userRepository.find();
-    console.log("getUser",getUser)
-    const newUser = new User(req.body.name, req.body.username, req.body.email);
-    await userRepository.save(newUser);
-    res.send(newUser);
+	const userRepository = getMongoRepository(User);
+    const getUser =await userRepository.find({email : req.body.email});
+    if(getUser.length > 0){
+    	req.body.message = "Email already exists";
+    	res.status(409).send(req.body);
+    }else{
+    	const newUser = new User(req.body.name, req.body.username, req.body.email);
+    	await userRepository.save(newUser);
+    	res.send(newUser);
+    }
 }
 
 exports.getUser = async (req, res) => {
-	var userRepository = getMongoRepository(User);
-    var name,username,email;
-    const newUser = new User(req.body.name, req.body.username, req.body.email);
-    await userRepository.save(newUser);
-    res.send(newUser);
+	const userRepository = getMongoRepository(User);
+	const whereObject = {id : ObjectID(req.params.id)};
+	console.log("whereObject",whereObject)
+    const getUser =await userRepository.find(ObjectID(req.params.id));
+    res.status(200).send(getUser);
 }

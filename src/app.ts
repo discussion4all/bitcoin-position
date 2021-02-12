@@ -4,6 +4,8 @@ import { json } from 'body-parser';
 import {logger} from "./middlewares/logger";
 
 import {createUserRouter} from "./routes/createUser";
+import  {bitcoin} from "./routes/bitcoin";
+
 
 
 const app = express();
@@ -15,6 +17,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use(createUserRouter);
+app.use(bitcoin);
 
 app.all('*', (req: Request, res: Response) => {
     res.send(404);
