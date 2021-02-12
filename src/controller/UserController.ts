@@ -13,21 +13,35 @@ import  {ObjectID} from 'mongodb';
 
 exports.createUser = async (req, res) => {
 	const userRepository = getMongoRepository(User);
-    const getUser =await userRepository.find({email : req.body.email});
-    if(getUser.length > 0){
-    	req.body.message = "Email already exists";
-    	res.status(409).send(req.body);
-    }else{
-    	const newUser = new User(req.body.name, req.body.username, req.body.email);
-    	await userRepository.save(newUser);
-    	res.send(newUser);
-    }
+	if(req.body.name && req.body.username && req.body.email){
+		const getUser =await userRepository.find({email : req.body.email});
+	    if(getUser.length > 0){
+	    	req.body.message = "Email already exists";
+	    	res.status(409).send(req.body);
+	    }else{
+	    	const newUser = new User(req.body.name, req.body.username, req.body.email);
+	    	await userRepository.save(newUser);
+	    	res.send(newUser);
+	    }
+	}else{
+		res.status(422).send({message : "Some value are missign"});
+	}
+    
 }
 
 exports.getUser = async (req, res) => {
 	const userRepository = getMongoRepository(User);
-	const whereObject = {id : ObjectID(req.params.id)};
-	console.log("whereObject",whereObject)
     const getUser =await userRepository.find(ObjectID(req.params.id));
-    res.status(200).send(getUser);
+    if(getUser.length > 0){
+    	res.status(200).send(getUser);
+    }else{
+    	res.status(204).send({message : "User not found"});
+    }
+}
+
+exports.updateUser = async(req,res)=>{
+	const userRepository = getMongoRepository(User);
+	req.body.updatedAt = new Date();
+    await userRepository.update({ 'id': ObjectID(req.params.id) },req.body)
+	res.status(200).send(req.body);	
 }

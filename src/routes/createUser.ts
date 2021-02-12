@@ -7,5 +7,6 @@ router.get('/users/:id',UserController.getUser);
 
 router.post('/users',UserController.createUser);
 
+router.put('/users/:id',UserController.updateUser);
 
 export {router as createUserRouter}
