@@ -1,3 +1,4 @@
 /node_modules
-reruest_logs.txt
 .env
+.idea
+request_logs.txt
