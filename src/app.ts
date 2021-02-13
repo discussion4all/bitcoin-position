@@ -13,7 +13,7 @@ app.use(json());
 app.use(logger);
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Yo');
+    res.send('Server is working...');
 });
 
 app.use(createUserRouter);
