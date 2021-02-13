@@ -1,3 +1,4 @@
+require("dotenv").config()
 import express, {Request, Response} from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
